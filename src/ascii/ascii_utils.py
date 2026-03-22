@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Fuentes de tipo de letras ASCII disponible
-from ascii_fonts import *      # Importar todas las fuentes disponibles en el archivo ascii_fonts.py
+from . import ascii_fonts      # Importar todas las fuentes disponibles en el archivo ascii_fonts.py
 
 # Importación de librerías internas de Python
 import os

@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 
 # Fuentes de tipo de letras ASCII disponible
-from ascii_fonts import *     # Importar todas las fuentes disponibles en el archivo ascii_fonts.py
+from . import ascii_fonts     # Importar todas las fuentes disponibles en el archivo ascii_fonts.py
 # Colores disponibles para las letras ASCII disponible
-from ascii_colors import DEFAULT_COLORS, COLORS, RESET_COLOR     # Importar todas las fuentes disponibles en el archivo ascii_colors.py
+from .ascii_colors import DEFAULT_COLORS, COLORS, RESET_COLOR     # Importar todas las fuentes disponibles en el archivo ascii_colors.py
 # Importar el cargador de fuentes de letras con formato .flf
-from flf_loader import FLFFont
+from .flf_loader import FLFFont
 # Importar el renderer, para procesar el texto que queremos imprimir en pantalla
-from ascii_render import render_wrapped
+from .ascii_render import render_wrapped
 # Importar la func de lista de fuentes disponibles
-from ascii_utils import list_available_fonts
+from .ascii_utils import list_available_fonts
 
 # Importar librerías internas de Python
 import os
+from pathlib import Path
 
 
 # Mostrar el Banner Principal del programa
@@ -73,7 +74,10 @@ def ascii_printer(text: str, font_name=None, color_name=None):
     :return rendered:
     """ 
     # Carpeta donde están tus fuentes ASCII
-    fonts_dir = "ascii_fonts/"
+    #fonts_dir = "ascii_fonts/"
+    fonts_dir = Path(__file__).parent / "ascii_fonts"
+    # O si necesitas string:
+    fonts_dir = os.path.dirname(__file__) + "/ascii_fonts"
 
     # Búsqueda de fuentes disponibles
     available_fonts = list_available_fonts(fonts_dir=fonts_dir)

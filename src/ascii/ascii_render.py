@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Importar utilidades de obtener el tamaño de ancho de la terminal en uso
-from ascii_utils import get_terminal_width
+from .ascii_utils import get_terminal_width
 
 # Utilizar en el README.md
 """

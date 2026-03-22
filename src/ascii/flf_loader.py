@@ -54,18 +54,23 @@ class FLFFont:
         para cada carácter ASCII imprimible
         """
         # Abre el archivo .flf en modo lectura, y lee todas las líneas
-        with open(self.path, "r", encoding="utf-8", errors="ignore") as f:
-            lines = f.readlines()
+        try:
+            with open(self.path, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+        except FileNotFoundError:
+            raise FileNotFoundError(f"File font not found: {self.path}")
+        except UnicodeDecodeError:
+            raise ValueError(f"Archivo {self.path} no es UTF-8 válido")
+
+        # Validación del archivo que comprueba si es tiene el formato FIGlet correcto, si no lanza un error ValueError()
+        if not lines or not lines[0].startswith("flf2a"):
+            raise ValueError("Archivo FLF inválido: header incorrecto")
 
         # ---- PARSE HEADER ----
         # Primera línea del .flf -> contiene metadata del archivo FIGlet
         header = lines[0].rstrip("\n")
         # Divide en partes por espacios
         parts = header.split()
-
-        # Validación del archivo que comprueba si es tiene el formato FIGlet correcto, si no lanza un error ValueError()
-        if not parts[0].startswith("flf2a"):
-            raise ValueError("Archivo FLF inválido")
 
         # Leer parámetros importantes del header
         # Último carácter del identificador 'flf2aX' -> hardblank
@@ -94,13 +99,8 @@ class FLFFont:
                 line = lines[idx].rstrip("\n")
 
                 # Eliminar caracteres terminadores de FIGlet (@, $, #, etc.)
-                while line and line[-1] == line[-1]:
-                    if line[-1] == self.hardblank:
-                        break
-                    if line[-1] in "@$#":
-                        line = line[:-1]
-                    else:
-                        break
+                while line and line[-1] in "@$#":
+                    line = line[:-1]
 
                 # Reemplazar hardblank por espacio real " "
                 line = line.replace(self.hardblank, " ")
